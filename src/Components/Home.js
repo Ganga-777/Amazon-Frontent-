@@ -1,9 +1,21 @@
-import React from 'react';
+import axios from "../axios";
+import React, {useState ,useEffect } from "react";
 import styled from "styled-components";
 import Navbar from './Navbar';
 import Card from './Card';
 
 function Home() {
+
+  const[products,setProducts] = useState("");
+  useEffect(() =>{
+    const fetchdata = async () => {
+      const data = await axios.get("/products/get");
+      setProducts(data);
+
+    };
+    fetchdata();
+  },[]);
+
   return (
     <Container>
         <Navbar />
@@ -13,48 +25,18 @@ function Home() {
       </Banner>
 
       <Main>
-       <Card 
-       id={1}
-        image={"https://m.media-amazon.com/images/I/61w+WVm67yL._SX679_.jpg"}
-       price={249}
-       rating={3}
-       title={"Matrix Kids Edition Digital Watch"}
-       />
+       
 
-       <Card id={2} image={"https://m.media-amazon.com/images/I/312dp6ZLIQL._AC_SR400,600_AGcontrast_.jpg"}
-       price={9499}
-       rating={4.5}
-       title={"Nokia C32 with 50MP  "}/>
-
-       <Card id={3} image={"https://m.media-amazon.com/images/I/41VSH+kNLOL._SY300_SX300_.jpg"}
-       price={39990}
-       rating={4}
-       title={"Echo Dot"}/>
-
-       <Card id={4} image={"https://m.media-amazon.com/images/I/71FGRi7gXzL._SX450_.jpg"}
-       price={2500}
-       rating={3}
-       title={"Hisense 139 cm (55 inches) "}/>
-
-       <Card id={5} image={"https://m.media-amazon.com/images/I/61SUj2aKoEL._SX522_.jpg"}
-       price={20999}
-       rating={4.5}
-       title={"Apple AirPods Pro (2nd Generation)"}/>
-
-       <Card id={6} image={"https://m.media-amazon.com/images/I/61ssa5-V61L._SY879_.jpg"}
-       price={2500}
-       rating={3}
-       title={"VASTRAMAY Men's Cotton "}/>
-
-       <Card id={7} image={"https://m.media-amazon.com/images/I/412lio2M4oL._SX300_SY300_QL70_FMwebp_.jpg"}
-       price={29900}
-       rating={4.5}
-       title={"The Sleep Company SmartGRID Orthopedic Pro - Doctor"}/>
-
-       <Card id={8} image={"https://m.media-amazon.com/images/I/71JbxWeTvZL._AC_SY175_.jpg"}
-       price={349}
-       rating={4}
-       title={"Boult Audio BassBuds X1 in-Ear Wired Earphones with 10mm )"}/>
+      {products &&
+          products?.data.map((product) => (
+            <Card
+              id={product._id}
+              image={product.imageURL}
+              price={product.price}
+              rating={product.rating}
+              title={product.title}
+            />
+          ))}
 
             
       </Main>
